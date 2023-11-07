@@ -11,14 +11,14 @@ export class PulumiStack extends cdk.Stack {
 
     const handler = new lambda.Function(this, "Lambda", {
       runtime: lambda.Runtime.NODEJS_18_X,
+      architecture: lambda.Architecture.X86_64,
+      memorySize: 1024,
       code: lambda.Code.fromDockerBuild(path.join(__dirname, "../../pulumi"), {
         platform: lambda.Architecture.X86_64.dockerPlatform,
         imagePath: "/var/task",
       }),
       handler: "app.handler",
       logRetention: logs.RetentionDays.ONE_MONTH,
-      memorySize: 1024,
-      architecture: lambda.Architecture.X86_64,
     })
 
     new apigateway.LambdaRestApi(this, `RestApi`, { handler })
