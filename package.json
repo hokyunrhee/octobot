@@ -1,11 +1,12 @@
 {
   "name": "octobot",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "bin": {
     "octobot": "bin/app.js"
   },
   "scripts": {
     "prepare": "husky install",
+    "dev": "tsx src/app.ts",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
@@ -13,6 +14,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "@slack/bolt": "^3.14.0",
     "aws-cdk-lib": "2.104.0",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
@@ -37,9 +40,5 @@
   },
   "engines": {
     "node": ">=18.0.0 <19"
-  },
-  "workspaces": [
-    "slack-app",
-    "pulumi"
-  ]
+  }
 }
