@@ -7,8 +7,14 @@ import * as logs from "aws-cdk-lib/aws-logs"
 import { Construct } from "constructs"
 
 export class OctobotStack extends cdk.Stack {
+  public nodejsFunction: nodejs.NodejsFunction
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props)
+
+    const paramsAndSecrets = lambda.ParamsAndSecretsLayerVersion.fromVersion(lambda.ParamsAndSecretsVersions.V1_0_103, {
+      logLevel: lambda.ParamsAndSecretsLogLevel.DEBUG,
+    })
 
     const handler = new nodejs.NodejsFunction(this, "Lambda", {
       runtime: lambda.Runtime.NODEJS_18_X,
@@ -30,10 +36,13 @@ export class OctobotStack extends cdk.Stack {
         },
       },
       logRetention: logs.RetentionDays.ONE_MONTH,
+      paramsAndSecrets,
     })
 
     const restApi = new apigateway.RestApi(this, "OctobotRestApi")
     const slackEvents = restApi.root.addResource("slack").addResource("events")
     slackEvents.addMethod("POST", new apigateway.LambdaIntegration(handler))
+
+    this.nodejsFunction = handler
   }
 }
