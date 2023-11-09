@@ -1,22 +1,49 @@
-# Welcome to your CDK TypeScript project
+# Octobot
 
-This is a blank project for CDK development with TypeScript.
+## Flowchart
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+```mermaid
+flowchart TD
+  A --> B
+  B --> |No| C
+  B --> |Yes| D
+  D --> |Brach Protection| E
+  D --> |Ruleset| F
+  D --> |CODEOWNERS| G
+  D --> |Release Rule| H
+  E --> I
+  F --> J
+  G --> K
+  H --> L
+  I --> Z
+  J --> Z
+  K --> Z
+  L --> Z
 
-## Useful commands
-
-- `npm run build` compile typescript to js
-- `npm run watch` watch for changes and compile
-- `npm run test` perform the jest unit tests
-- `cdk deploy` deploy this stack to your default AWS account/region
-- `cdk diff` compare deployed stack with current state
-- `cdk synth` emits the synthesized CloudFormation template
-
-## Workspaces commands
-
-```sh
-npm init -w <workspace>
-npm install <library> -w <workspace>
-npm script-command -w
+  A([Slash command]):::T
+  B{If isValid = true}
+  C([Invalid Command]):::T
+  D{"`**Which Command**?
+  Brach Protection,
+  Ruleset, CODEOWNERS
+  Release Rule`"}
+  E["`**Fill modal form**
+  *Select at least one repo
+  `"]
+  F["`**Fill modal form**
+  *Select at least one repo
+  `"]
+  G["`**Fill modal form**
+  *Enter the lead
+  *Select at least one repo
+  `"]
+  H["`**Fill modal form**
+  *Select at least one repo
+  `"]
+  I["`Apply the pre-configured protection rule to main branch`"]
+  J["`Apply the pre-configured ruleset`"]
+  K["`Update the ./github/CODEOWNER`"]
+  L["`Update the .github/workflows/*`"]
+  Z([Command Applied]):::T
+  classDef T fill:#bada55, stroke:#6f8233
 ```
