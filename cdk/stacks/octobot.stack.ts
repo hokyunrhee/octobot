@@ -16,6 +16,19 @@ export class OctobotStack extends cdk.Stack {
       architecture: lambda.Architecture.X86_64,
       entry: path.join(__dirname, "../../src/app.ts"),
       handler: "handler",
+      bundling: {
+        commandHooks: {
+          beforeBundling() {
+            return []
+          },
+          beforeInstall() {
+            return []
+          },
+          afterBundling(inputDir, outputDir) {
+            return [`cp -r ${path.join(inputDir, "src", "assets")} ${outputDir}/`]
+          },
+        },
+      },
       logRetention: logs.RetentionDays.ONE_MONTH,
     })
 
