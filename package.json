@@ -6,19 +6,20 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "dev": "tsx src/app.ts",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ignore-path .gitignore --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.449.0",
     "@octokit/rest": "^20.0.2",
     "@slack/bolt": "^3.14.0",
     "aws-cdk-lib": "2.104.0",
     "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",

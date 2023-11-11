@@ -1,8 +1,10 @@
 import * as cdk from "aws-cdk-lib"
 
-import { OctobotStack } from "./stacks/octobot.stack"
+import { LambdaStack } from "./stacks/lambda.stack"
+import { RestApiStack } from "./stacks/rest-api.stack"
 import { SecretStack } from "./stacks/secret.stack"
 
 const app = new cdk.App()
-const octobotStack = new OctobotStack(app, "OctobotStack")
-new SecretStack(app, "SecretStack", { grantee: octobotStack.nodejsFunction })
+const secretStack = new SecretStack(app, "SecretStack")
+const lambdaStack = new LambdaStack(app, "LambdaStack", { secret: secretStack.secret })
+new RestApiStack(app, "RestApiStack", { handler: lambdaStack.nodejsFunction })

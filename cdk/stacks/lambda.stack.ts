@@ -1,15 +1,19 @@
 import * as path from "path"
 import * as cdk from "aws-cdk-lib"
-import * as apigateway from "aws-cdk-lib/aws-apigateway"
 import * as lambda from "aws-cdk-lib/aws-lambda"
 import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs"
 import * as logs from "aws-cdk-lib/aws-logs"
+import * as sm from "aws-cdk-lib/aws-secretsmanager"
 import { Construct } from "constructs"
 
-export class OctobotStack extends cdk.Stack {
+interface Props extends cdk.StackProps {
+  secret: sm.Secret
+}
+
+export class LambdaStack extends cdk.Stack {
   public nodejsFunction: nodejs.NodejsFunction
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props)
 
     const paramsAndSecrets = lambda.ParamsAndSecretsLayerVersion.fromVersion(lambda.ParamsAndSecretsVersions.V1_0_103, {
@@ -37,11 +41,12 @@ export class OctobotStack extends cdk.Stack {
       },
       logRetention: logs.RetentionDays.ONE_MONTH,
       paramsAndSecrets,
+      environment: {
+        SECRET_ARN: props.secret.secretArn,
+      },
     })
 
-    const restApi = new apigateway.RestApi(this, "OctobotRestApi")
-    const slackEvents = restApi.root.addResource("slack").addResource("events")
-    slackEvents.addMethod("POST", new apigateway.LambdaIntegration(handler))
+    props.secret.grantRead(handler)
 
     this.nodejsFunction = handler
   }
